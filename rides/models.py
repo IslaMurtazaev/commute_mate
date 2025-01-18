@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class RideRequest(models.Model):
     CREATOR_TYPES = [
@@ -12,7 +13,11 @@ class RideRequest(models.Model):
     ]
     
     request_id = models.AutoField(primary_key=True)
-    creator_id = models.IntegerField()
+    creator = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='ride_requests'
+    )
     creator_type = models.CharField(max_length=10, choices=CREATOR_TYPES)
     start_location = models.CharField(max_length=255)
     end_location = models.CharField(max_length=255)
