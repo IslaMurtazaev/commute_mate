@@ -11,21 +11,20 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+# Secret Key
+SECRET_KEY = config('DJANGO_SECRET_KEY', default='default-secret-key')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&h10#a)5wpvcq%==$$!plgkwprc*w56=w=0!s^sv8se+((+mx@'
+# Debug
+DEBUG = config('DJANGO_DEBUG', cast=bool, default=False)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+# Allowed Hosts
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='').split(',')
 
 
 # Application definition
@@ -79,8 +78,12 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DJANGO_DB_NAME', default='default_db'),
+        'USER': config('DJANGO_DB_USER', default='default_user'),
+        'PASSWORD': config('DJANGO_DB_PASSWORD', default='default_password'),
+        'HOST': config('DJANGO_DB_HOST', default='localhost'),
+        'PORT': config('DJANGO_DB_PORT', default='5432'),
     }
 }
 
