@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rides',
     'rest_framework.authtoken',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
+
+AUTH_USER_MODEL = 'users.User'
