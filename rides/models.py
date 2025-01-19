@@ -20,7 +20,11 @@ class RideRequest(models.Model):
     )
     creator_type = models.CharField(max_length=10, choices=CREATOR_TYPES)
     start_location = models.CharField(max_length=255)
-    end_location = models.CharField(max_length=255)
+    start_latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    start_longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    destination_location = models.CharField(max_length=255)
+    destination_latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    destination_longitude = models.DecimalField(max_digits=9, decimal_places=6)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     status = models.CharField(

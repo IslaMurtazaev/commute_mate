@@ -16,7 +16,11 @@ class RideRequestSerializer(serializers.ModelSerializer):
             'creator_last_name',
             'creator_type',
             'start_location',
-            'end_location',
+            'start_latitude',
+            'start_longitude',
+            'destination_location',
+            'destination_latitude',
+            'destination_longitude',
             'start_time',
             'end_time',
             'status',
@@ -24,4 +28,4 @@ class RideRequestSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at'
         ]
-        read_only_fields = ['request_id', 'creator_first_name', 'creator_last_name', 'created_at', 'updated_at'] 
+        read_only_fields = ['request_id', 'creator_first_name', 'creator_last_name', 'created_at', 'updated_at']
