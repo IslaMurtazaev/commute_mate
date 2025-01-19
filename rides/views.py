@@ -21,9 +21,17 @@ class IsCreatorOrReadOnly(permissions.BasePermission):
         return obj.creator == request.user
 
 class RideRequestViewSet(viewsets.ModelViewSet):
-    queryset = RideRequest.objects.all()
     serializer_class = RideRequestSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsCreatorOrReadOnly]
+
+    def get_queryset(self):
+        """
+        Return only future rides, sorted by start time
+        """
+        now = timezone.now()
+        return RideRequest.objects.filter(
+            end_time__gt=now
+        ).order_by('start_time')
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
