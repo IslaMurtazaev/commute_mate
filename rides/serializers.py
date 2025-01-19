@@ -1,12 +1,28 @@
 from rest_framework import serializers
 from .models import RideRequest
 from django.contrib.auth import get_user_model
+from decimal import Decimal, ROUND_DOWN
 
 User = get_user_model()
+
+class CoordinateField(serializers.DecimalField):
+    def __init__(self, **kwargs):
+        super().__init__(max_digits=9, decimal_places=6, **kwargs)
+
+    def to_internal_value(self, data):
+        """Convert the input value to a Decimal with 6 decimal places"""
+        try:
+            return Decimal(str(data)).quantize(Decimal('.000001'), rounding=ROUND_DOWN)
+        except (TypeError, ValueError):
+            self.fail('invalid')
 
 class RideRequestSerializer(serializers.ModelSerializer):
     creator_first_name = serializers.CharField(source='creator.first_name', read_only=True)
     creator_last_name = serializers.CharField(source='creator.last_name', read_only=True)
+    start_latitude = CoordinateField()
+    start_longitude = CoordinateField()
+    destination_latitude = CoordinateField()
+    destination_longitude = CoordinateField()
     
     class Meta:
         model = RideRequest
