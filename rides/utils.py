@@ -1,6 +1,4 @@
 from math import radians, sin, cos, sqrt, atan2
-import requests
-from django.conf import settings
 
 def calculate_distance(lat1, lon1, lat2, lon2):
     """
@@ -20,27 +18,3 @@ def calculate_distance(lat1, lon1, lat2, lon2):
     distance = R * c
 
     return distance
-
-def send_push_notification(expo_push_token, title, body, data=None):
-    """
-    Send push notification using Expo's push notification service
-    """
-    messages = [{
-        'to': expo_push_token,
-        'sound': 'default',
-        'title': title,
-        'body': body,
-        'data': data or {}
-    }]
-    
-    response = requests.post(
-        'https://exp.host/--/api/v2/push/send',
-        json=messages,
-        headers={
-            'Accept': 'application/json',
-            'Accept-encoding': 'gzip, deflate',
-            'Content-Type': 'application/json',
-        }
-    )
-    
-    return response.json() 

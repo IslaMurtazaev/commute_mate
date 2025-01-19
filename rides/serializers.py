@@ -19,6 +19,7 @@ class CoordinateField(serializers.DecimalField):
 class RideRequestSerializer(serializers.ModelSerializer):
     creator_first_name = serializers.CharField(source='creator.first_name', read_only=True)
     creator_last_name = serializers.CharField(source='creator.last_name', read_only=True)
+    creator_phone_number = serializers.CharField(source='creator.phone_number', read_only=True)
     start_latitude = CoordinateField()
     start_longitude = CoordinateField()
     destination_latitude = CoordinateField()
@@ -30,6 +31,7 @@ class RideRequestSerializer(serializers.ModelSerializer):
             'request_id',
             'creator_first_name',
             'creator_last_name',
+            'creator_phone_number',
             'creator_type',
             'start_location',
             'start_latitude',
@@ -44,4 +46,4 @@ class RideRequestSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at'
         ]
-        read_only_fields = ['request_id', 'creator_first_name', 'creator_last_name', 'created_at', 'updated_at']
+        read_only_fields = ['request_id', 'creator_first_name', 'creator_last_name', 'creator_phone_number', 'created_at', 'updated_at']

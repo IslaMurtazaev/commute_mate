@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.utils import timezone
 from .models import RideRequest
 from .serializers import RideRequestSerializer
-from .utils import calculate_distance, send_push_notification
+from .utils import calculate_distance
 
 class IsCreatorOrReadOnly(permissions.BasePermission):
     """
@@ -64,7 +64,7 @@ class RideRequestViewSet(viewsets.ModelViewSet):
         ).filter(
             status='new',
             end_time__gt=timezone.now()
-        ).select_related('creator')  # Add this to optimize queries
+        ).select_related('creator')
         
         for request in potential_matches:
             start_distance = calculate_distance(
@@ -79,33 +79,16 @@ class RideRequestViewSet(viewsets.ModelViewSet):
             if start_distance <= MAX_DISTANCE and dest_distance <= MAX_DISTANCE:
                 request_data = self.get_serializer(request).data
                 nearby_requests.append(request_data)
-                
-                # Send push notification to the creator of the matching request
-                if request.creator.expo_push_token:
-                    creator_type = self.request.data.get('creator_type', 'User')
-                    send_push_notification(
-                        request.creator.expo_push_token,
-                        'New Nearby Ride Request!',
-                        f'A {creator_type} is traveling a similar route.',
-                        data={
-                            'type': 'nearby_ride',
-                            'ride_request_id': request_data['request_id'],
-                            'start_distance': round(start_distance, 2),
-                            'destination_distance': round(dest_distance, 2)
-                        }
-                    )
+                    
+        # Send email to the current user about all matches
+        if nearby_requests and self.request.user.email:
+            # send_nearby_rides_email(
+            #     user=self.request.user,
+            #     nearby_requests=nearby_requests,
+            #     new_ride=False
+            # )
+            print('sending email to user', self.request.user)
         
-        # Also notify the current user about matches
-        if nearby_requests and self.request.user.expo_push_token:
-            send_push_notification(
-                self.request.user.expo_push_token,
-                'Matching Rides Found!',
-                f'Found {len(nearby_requests)} similar ride requests.',
-                data={
-                    'type': 'matching_rides',
-                    'count': len(nearby_requests)
-                }
-            )
         
         return nearby_requests
 

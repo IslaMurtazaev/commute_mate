@@ -39,14 +39,3 @@ class UserDetailView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user 
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def update_push_token(request):
-    """Update user's Expo push token"""
-    token = request.data.get('token')
-    if token:
-        request.user.expo_push_token = token
-        request.user.save()
-        return Response({'status': 'token updated'})
-    return Response({'error': 'token is required'}, status=400) 
