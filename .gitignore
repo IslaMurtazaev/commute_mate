@@ -29,6 +29,7 @@ env/
 .vscode/
 *.swp
 *.swo
+commute_mate.code-workspace
 
 # Local development settings
 local_settings.py

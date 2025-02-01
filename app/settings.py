@@ -25,6 +25,7 @@ DEBUG = config('DJANGO_DEBUG', cast=bool, default=False)
 
 # Allowed Hosts
 ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='').split(',')
+CORS_ALLOWED_ORIGINS = config('DJANGO_ALLOWED_HOSTS', default='').split(',')
 
 
 # Application definition
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
